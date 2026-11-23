@@ -68,9 +68,17 @@
       scanner.start(
         { facingMode: "environment" },
         { fps: 10, qrbox: 250 },
-        function(kodQR) {
-          document.getElementById("status").textContent =
-            "QR berjaya dibaca: " + kodQR;
+       function(kodQR) {
+  document.getElementById("status").textContent =
+    "QR berjaya dibaca: " + kodQR;
+
+  const urlBorang =
+    "https://script.google.com/macros/s/AKfycbzDcQ5UZDyvW4LW_pXgqUP5Ptrhz5hLzuOzWMrXuivCpCI8fGZOIGQxMWoog_jWIA_efw/exec";
+
+  const urlTujuan =
+    urlBorang + "?id=" + encodeURIComponent(kodQR.trim());
+
+  window.location.href = urlTujuan;
 
           scanner.stop().then(function() {
             scanner = null;
