@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+  <title>Pengimbas QR e-LEWAT</title>
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f5fc;
+      color: #30234d;
+      text-align: center;
+      padding: 20px;
+    }
+    .card {
+      background: white;
+      max-width: 480px;
+      margin: 30px auto;
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: 0 4px 15px #ddd5eb;
+    }
+    h2 { color: #6341a3; }
+    button {
+      background: #6945aa;
+      color: white;
+      border: none;
+      padding: 15px;
+      border-radius: 12px;
+      width: 100%;
+      font-size: 17px;
+      cursor: pointer;
+    }
+    #reader { margin-top: 20px; }
+    #status { margin-top: 15px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>e-LEWAT SMK PENRISSEN</h2>
+    <p>Sistem Pengimbas QR Murid</p>
+
+    <button id="mula" onclick="mulaImbas()">
+      Mula Imbas QR
+    </button>
+
+    <div id="reader"></div>
+    <p id="status">Sedia untuk mengimbas.</p>
+  </div>
+
+  <script>
+    let scanner = null;
+
+    function mulaImbas() {
+      if (scanner) return;
+
+      if (typeof Html5Qrcode === "undefined") {
+        document.getElementById("status").textContent =
+          "Pustaka pengimbas gagal dimuatkan.";
+        return;
+      }
+
+      scanner = new Html5Qrcode("reader");
+
+      scanner.start(
+        { facingMode: "environment" },
+        { fps: 10, qrbox: 250 },
+        function(kodQR) {
+          document.getElementById("status").textContent =
+            "QR berjaya dibaca: " + kodQR;
+
+          scanner.stop().then(function() {
+            scanner = null;
+          }).catch(function(error) {
+            console.error(error);
+            scanner = null;
+          });
+        },
+        function() {}
+      ).catch(function(error) {
+        document.getElementById("status").textContent =
+          "Kamera gagal dibuka: " + error;
+        scanner = null;
+      });
+    }
+  </script>
+</body>
+</html>
